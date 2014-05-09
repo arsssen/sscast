@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+
+  "name": "SSCast",
+  "description": "Cast stuff to your chromecast.",
+  "version": "1.1",
+
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "webNavigation",
+    "background",
+    "*://*/*"
+  ],
+  "browser_action": {
+    "default_icon": "images/tv.png"
+  },
+  "background": {
+    "scripts": ["scripts/jquery.js",
+                "scripts/common.js",
+                "scripts/background.js"],
+    "persistent" : false
+  },
+  "web_accessible_resources": [
+    "scripts/cast_content_script.js"
+  ]
+}
