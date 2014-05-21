@@ -12,10 +12,19 @@ function fillFiles(tabs) {
     $('#files').html();
     // Uuuugly.
     $.each(files, function(index, url) {
-      $('#files').append('<nobr><button class="css3button" id="btn_' + index
-                          + '"> Cast ' +  url.split('/').pop() + '</button>'
-                          + '<br/>')
-      $('#btn_' + index).click({tabId: tabId, file: url },buttonClicked);
+        var filename = url.split('/').pop();
+        var extension = filename.split('.').pop();
+        var unsupported = false;
+        if (extension.toLowerCase() === 'flv') {
+            unsupported = true;
+        }
+      $('#files').append('<nobr><button class="css3button ' + (unsupported ? 'unsupported' : '') + '" id="btn_' + index
+                          + '">' + (unsupported ? 'flv not supported ' : ' Cast ') +  filename + '</button>'
+                          + '<br/>');
+      if (!unsupported) {
+          $('#btn_' + index).click({tabId: tabId, file: url },buttonClicked);
+      }
+
     });
   });
 }
