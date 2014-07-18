@@ -2,8 +2,8 @@
   "manifest_version": 2,
 
   "name": "SSCast",
-  "description": "Cast stuff to your chromecast.",
-  "version": "1.2",
+  "description": "Chrome plugin that allows casting of videos from some websites directly to Chromecast and control playback, volume, play/pause etc.",
+  "version": "1.2.1",
 
   "permissions": [
     "activeTab",
