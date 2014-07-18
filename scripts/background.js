@@ -27,7 +27,8 @@ function startFetchAndInject(url) {
                         'scripts/decodeu.js',
                         'scripts/extract_stepashka.js');
   } else {
-    //console.log('Unsupported web site.')
+    console.log('Unrecognized url, trying all mp4/mkv/webm files.')
+    injectContentScript(url, '', 'scripts/extract_default.js');
   }
 }
 

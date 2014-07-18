@@ -6,13 +6,16 @@ var session = null;
 var DEBUG = true;
 //NOTE: kccbSSCastPlayableFile var contains file url to play.
 
-togglePlay('Wait.');
-setStatus('Init session.');
-if (!chrome.cast || !chrome.cast.isAvailable) {
+if (!document.readystate !== "complete" ||
+    !chrome.cast ||
+    !chrome.cast.isAvailable) {
+  console.log('Document not ready yet');
   setTimeout(initializeCastApi, 1000);
+} else {
+  togglePlay('Wait.');
+  setStatus('Init session.');
+  setTimeout(updateProgress, 5000);
 }
-
-setTimeout(updateProgress, 5000);
 
 function doIOwnTheVideo() {
   if (currentMediaSession ) {

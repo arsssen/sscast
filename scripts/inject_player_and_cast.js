@@ -18,6 +18,12 @@ function injectPlayerHTML() {
   cast_api.src = "https://www.gstatic.com/cv/js/sender/v1/cast_sender.js";
   document.body.appendChild(cast_api);
 
+  console.log("Injecting jQuery");
+  var jQueryScr   = document.createElement("script");
+  jQueryScr.type  = "text/javascript";
+  jQueryScr.src   = chrome.extension.getURL('scripts/jquery.js'),
+  document.body.appendChild(jQueryScr);
+
   var script   = document.createElement("script");
   script.type  = "text/javascript";
   script.src   = chrome.extension.getURL('scripts/cast_content_script.js'),
