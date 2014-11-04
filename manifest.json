@@ -3,13 +3,14 @@
 
   "name": "SSCast",
   "description": "Chrome plugin that allows casting of videos from some websites directly to Chromecast and control playback, volume, play/pause etc.",
-  "version": "1.2.1",
+  "version": "1.3.0",
 
   "permissions": [
     "activeTab",
+    "background",
+    "storage",
     "tabs",
     "webNavigation",
-    "background",
     "*://*/*"
   ],
   "browser_action": {

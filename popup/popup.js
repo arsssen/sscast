@@ -7,26 +7,26 @@ $(document).ready(function(){
 
 function fillFiles(tabs) {
   tabId = tabs[0].id;
-  chrome.runtime.getBackgroundPage(function(bg) {
-    files = bg.known_playable_tabs[tabId];
+  files = JSON.parse(localStorage[tabId]);
+  if (files != null) {
+    console.log(files);
     $('#files').html();
     // Uuuugly.
     $.each(files, function(index, url) {
-        var filename = url.split('/').pop();
-        var extension = filename.split('.').pop();
-        var unsupported = false;
-        if (extension.toLowerCase() === 'flv') {
-            unsupported = true;
-        }
+      var filename = url.split('/').pop();
+      var extension = filename.split('.').pop();
+      var unsupported = false;
+      if (extension.toLowerCase() === 'flv') {
+        unsupported = true;
+      }
       $('#files').append('<nobr><button class="css3button ' + (unsupported ? 'unsupported' : '') + '" id="btn_' + index
                           + '">' + (unsupported ? 'flv not supported ' : ' Cast ') +  filename + '</button>'
                           + '<br/>');
       if (!unsupported) {
-          $('#btn_' + index).click({tabId: tabId, file: url },buttonClicked);
+          $('#btn_' + index).click({tabId: tabId, file: url }, buttonClicked);
       }
-
     });
-  });
+  }
 }
 
 function buttonClicked(event) {
@@ -40,7 +40,7 @@ function buttonClicked(event) {
       chrome.tabs.executeScript(tabId, {
         code: 'var file_script = document.createElement("script");' +
               'file_script.text = "var kccbSSCastPlayableFile=\''
-              + media + '\';";' +
+              + escape(media) + '\';";' +
               'file_script.type = "text/javascript";' +
               'document.body.appendChild(file_script);' },
         function () {

@@ -1,8 +1,15 @@
-// Some global variables.
-known_playable_tabs = new Object;
-
 // Main logic launcher.
 chrome.webNavigation.onCompleted.addListener(function (details) {
+  // Erase localStorage.
+  chrome.tabs.query( { active: true },
+    function (tabs) {
+      if (!tabs.length) {
+        return;
+      }
+      tab_id = tabs[0].id;
+      localStorage[tab_id] = null;
+    }
+  );
   url = details.url;
   //console.log('onCompleted [' + url + '].');
   startFetchAndInject(url);
@@ -26,6 +33,11 @@ function startFetchAndInject(url) {
     injectContentScript(url,
                         'scripts/decodeu.js',
                         'scripts/extract_stepashka.js');
+  } else if (hostname.indexOf('seasonvar.') != -1) {
+    console.log('Seasonvar url found [' + url + ']');
+    injectContentScript(url,
+                        'scripts/decodeu.js',
+                        'scripts/extract_seasonvar.js');
   } else {
     console.log('Unrecognized url, trying all mp4/mkv/webm files.')
     injectContentScript(url, '', 'scripts/extract_default.js');
@@ -75,7 +87,7 @@ function playableFileParsed(data) {
       if (!tabs.length) {
         return;
       }
-      known_playable_tabs[tabs[0].id] = data.files;
+      localStorage[tabs[0].id] = JSON.stringify(data.files);
       chrome.browserAction.setIcon(
         {tabId : tabs[0].id, path: 'images/tv-ready-to-cast.png'});
       chrome.browserAction.setPopup(

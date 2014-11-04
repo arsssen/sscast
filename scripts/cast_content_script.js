@@ -5,6 +5,7 @@ var currentMediaSession = null;
 var session = null;
 var DEBUG = true;
 //NOTE: kccbSSCastPlayableFile var contains file url to play.
+kccbSSCastPlayableFile = unescape(kccbSSCastPlayableFile)
 
 if (!document.readystate !== "complete" ||
     !chrome.cast ||
