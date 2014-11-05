@@ -1,4 +1,4 @@
-// Module to extract and decode stepashka video file from page.
+// Module to extract and decode seasonvar video file from page.
 table1 =  ["J", "p", "v", "n", "s", "R", "0", "3", "T", "m", "w", "u", "9", "x", "g", "a", "G", "L", "U", "X", "z", "t", "b", "7", "H", "="];
 table2 =  ["f", "N", "W", "5", "e", "l", "V", "D", "y", "Z", "I", "i", "M", "o", "Q", "1", "B", "8", "2", "6", "c", "d", "4", "Y", "k", "C"];
 // Grab url to encoded string.
