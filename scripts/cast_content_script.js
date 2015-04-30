@@ -159,7 +159,7 @@ function launchCastAndPlay() {
 }
 
 function loadVideoAndPlay() {
-  setStatus('Playing URL' + kccbSSCastPlayableFile)
+  setStatus('Playing URL ' + kccbSSCastPlayableFile)
   var mediaInfo = new chrome.cast.media.MediaInfo(kccbSSCastPlayableFile);
   // Yet to see anyone with mkv...
   mediaInfo.contentType = 'video/mp4';
@@ -183,7 +183,8 @@ function loadVideoAndPlay() {
       togglePlay('Pause');
     },
     function (error) {
-      setStatus('URL cannot be played.' + error);
+
+      setStatus('URL cannot be played. [' + (error.description || error) + ']');
     });
 }
 
@@ -199,10 +200,10 @@ function setMediaVolume(level, mute) {
   request.volume = volume;
   currentMediaSession.setVolume(request,
     function() {
-      setStatus('Volume succesfully set');
+      setStatus('Volume succesfully set (' + level + ')');
     },
     function(error) {
-      setStatus('Error + [' + error + ']');
+      setStatus('Error [' + (error.description || error) + ']');
     });
 }
 
@@ -227,9 +228,9 @@ function setProgress(pos) {
   request.currentTime = pos * currentMediaSession.media.duration;
   currentMediaSession.seek(request,
     function () {
-      setStatus('Succesfully set position');
+      setStatus('Succesfully set position ('+ pos + ')');
     },
-    function (onError){
+    function (){
       setStatus('Seek failed');
     });
 }

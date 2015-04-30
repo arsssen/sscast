@@ -53,7 +53,7 @@ $(document).ready(function () {
                     html += '<button class="remove">x</button>';
                     html += '</li>';
                 }
-                html += '</ul>';
+                html += '</ul><hr/>';
             }
         }
         $("#savedfiles").html(html);
@@ -67,5 +67,9 @@ $(document).ready(function () {
             });
         });
     });
-    $("#cast-url").click(function() { playFile($("#url").val()); });
+    $("#cast-url").click(function() {
+        if ($("#url").val() != "") {
+            playFile($("#url").val());
+        }
+    });
 });
