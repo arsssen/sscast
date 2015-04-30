@@ -22,7 +22,7 @@ if (flashvars.indexOf('pl=') != -1) {
       $.each(json.playlist, function(i, episode) {
           data.files.push(episode.file);
       });
-      chrome.extension.sendMessage(data);
+      chrome.extension.sendMessage({site: "seasonvar", title: document.title, files: data});
     } else {
       console.log('Cannot parse seasonvar data');
     }

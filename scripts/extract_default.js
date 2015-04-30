@@ -12,5 +12,5 @@ $("a").each(function(idx, elem){
 });
 
 if (has_anything) {
-  chrome.extension.sendMessage(data);
+  chrome.extension.sendMessage({site: "misc.", title: document.title, files: data});
 }

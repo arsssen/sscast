@@ -24,23 +24,19 @@ chrome.extension.onMessage.addListener(playableFileParsed);
 function startFetchAndInject(url) {
   hostname = getHostname(url);
   if (!hostname) {
-    console.log('Failed to parse hostname.')
+    console.log('Failed to parse hostname.');
     return
   }
 
   if (hostname.indexOf('stepashka.') != -1) {
     console.log('Stepashka url found [' + url + '].');
-    injectContentScript(url,
-                        'scripts/decodeu.js',
-                        'scripts/extract_stepashka.js');
+    injectContentScript(url, 'scripts/decodeu.js','scripts/extract_stepashka.js');
   } else if (hostname.indexOf('seasonvar.') != -1) {
     console.log('Seasonvar url found [' + url + ']');
-    injectContentScript(url,
-                        'scripts/decodeu.js',
-                        'scripts/extract_seasonvar.js');
+    injectContentScript(url, 'scripts/decodeu.js', 'scripts/extract_seasonvar.js');
   } else {
-    console.log('Unrecognized url, trying all mp4/mkv/webm files.')
-    injectContentScript(url, '', 'scripts/extract_default.js');
+    console.log('Unrecognized url, trying all mp4/mkv/webm files.');
+    injectContentScript(url, 'scripts/decodeu.js', 'scripts/extract_default.js');
   }
 }
 
@@ -66,7 +62,7 @@ function injectContentScript(potential_url, lib_script, content_script) {
         console.log('Decoding library injected');
         chrome.tabs.executeScript(tab_id, { file: content_script },
           function(results){
-            console.log('Extraction done.');
+            console.log('Extraction done.', results);
             if (chrome.runtime.lastError) {
               console.error(chrome.runtime.lastError.message);
             }
@@ -76,12 +72,15 @@ function injectContentScript(potential_url, lib_script, content_script) {
   });
 }
 
-function playableFileParsed(data) {
+function playableFileParsed(msg) {
+    console.log('playableFileParsed', msg);
+  var data = msg.files;
   if (data.type == 'single') {
     console.log('Single playable file parsed ['  + data.files + ']');
   } else if (data.type == 'multiple') {
     console.log('Multiple playable files parsed [' + data.files + ']');
   }
+  saveFoundFiles(msg);
   chrome.tabs.query( { active: true, windowType: "normal"},
     function (tabs) {
       if (!tabs.length) {
@@ -98,3 +97,23 @@ function playableFileParsed(data) {
   )
 }
 
+function saveFoundFiles(data) {
+    console.log('saveFoundFiles', data);
+    chrome.storage.local.get("files", function(previous) {
+    console.log("previous: ", previous);
+      toStore = JSON.parse(JSON.stringify(previous.files || {}));
+        toStore[data.site] = toStore[data.site] || {};
+        toStore[data.site][data.title] = toStore[data.site][data.title] || [];
+      var i;
+      for (i = 0; i < data.files.files.length; i++) {
+          if (toStore[data.site][data.title].indexOf(data.files.files[i]) === -1 ) {
+              toStore[data.site][data.title].push(data.files.files[i])
+          }
+      }
+        console.log('toStore', toStore);
+    chrome.storage.local.set({'files': toStore}, function(a) {
+      console.log('saved');
+    });
+  });
+
+}

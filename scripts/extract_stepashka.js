@@ -27,7 +27,7 @@ if (st_equals.indexOf('st=') == 0) {
         });
       });
     }
-    chrome.extension.sendMessage(data);
+    chrome.extension.sendMessage({site: "stepashka", title: document.title, files: data});
   });
 } else {
    // Is there a file equals type???
