@@ -55,7 +55,7 @@ function buttonClicked(event) {
             if (chrome.runtime.lastError) {
               console.error(chrome.runtime.lastError.message);
             }
-            window.close();
+//            window.close();
           })
         })
     });

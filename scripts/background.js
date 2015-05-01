@@ -54,21 +54,23 @@ function injectContentScript(potential_url, lib_script, content_script) {
       tab_id = tabs[0].id;
 
       // Inject jquery, lib and content script.
-      chrome.tabs.executeScript(tab_id, { file: "scripts/jquery.js" },
-      function () {
-      console.log('JQuery injected');
-      chrome.tabs.executeScript(tab_id, { file: lib_script },
-      function () {
-        console.log('Decoding library injected');
-        chrome.tabs.executeScript(tab_id, { file: content_script },
-          function(results){
-            console.log('Extraction done.', results);
-            if (chrome.runtime.lastError) {
-              console.error(chrome.runtime.lastError.message);
-            }
+        chrome.tabs.executeScript(tab_id, { file: "scripts/common.js" }, function () {
+            chrome.tabs.executeScript(tab_id, { file: "scripts/jquery.js" },
+                function () {
+                    console.log('JQuery injected');
+                    chrome.tabs.executeScript(tab_id, { file: lib_script },
+                        function () {
+                            console.log('Decoding library injected');
+                            chrome.tabs.executeScript(tab_id, { file: content_script },
+                                function (results) {
+                                    console.log('Extraction done.', results);
+                                    if (chrome.runtime.lastError) {
+                                        console.error(chrome.runtime.lastError.message);
+                                    }
+                                });
+                        });
+                });
         });
-      });
-    });
   });
 }
 

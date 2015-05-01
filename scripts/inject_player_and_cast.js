@@ -1,5 +1,5 @@
 // Content script injecting the player.
-console.log('Cast injection script loading');
+console.log('Cast injection script loading', window.zzz);
 
 if ($('#kccbSSCastChromecast').length == 0) {
   console.log('"Player" not injected. Injecting now.');
@@ -19,9 +19,9 @@ function injectPlayerHTML() {
     loadScriptByUrl(chrome.extension.getURL('scripts/cast_content_script.js'));
 
 
-  volume_div = '<div>Volume: <input id="kccbSSCastVolume" type="range" min="0" max="100" step="1"></div>';
-  playpause_button = '<div><button type="button" id="kccbSSCast_play">Loading</button>';
-  progress_bar = '<div>Seek: <input id="kccbSSCastProgress" type="range" min="0" max="1000" step="1"></div>';
+  volume_div = '<div>Volume: <input id="kccbSSCastVolume" type="range" min="0" max="100" step="1" onmouseup="setMediaVolume(this.value/100,false);"></div>';
+  playpause_button = '<div><button type="button" id="kccbSSCast_play" onclick="playClicked()">Loading</button>';
+  progress_bar = '<div>Seek: <input id="kccbSSCastProgress" type="range" min="0" max="1000" step="1"  onmouseup="setProgress(this.value/1000, false);"></div>';
   status_div = '<div id="kccbSSCastStatus">Status</div>';
 
   $('body').append(
@@ -31,7 +31,7 @@ function injectPlayerHTML() {
     + playpause_button + '<hr/>'
     + status_div + '</div>');
 
-    // set handlers
+    // set handlers (can't use inline handlers on extension page and these handlers don't work when player is injected on website page, so need to have both until figuring out the problem)
     $("#kccbSSCastChromecast").waitUntilExists(function () {
         $("#kccbSSCast_play").click(function() {playClicked() });
         $("#kccbSSCastVolume").mouseup(function() { setMediaVolume(this.value/100,false); });
