@@ -29,3 +29,25 @@ function loadScriptByUrl(url) {
     s.src = url;
     document.body.appendChild(s);
 }
+
+
+function saveFoundFiles(data) {
+    console.log('saveFoundFiles', data);
+    chrome.storage.local.get("files", function(previous) {
+    console.log("previous: ", previous);
+      toStore = JSON.parse(JSON.stringify(previous.files || {}));
+        toStore[data.site] = toStore[data.site] || {};
+        toStore[data.site][data.title] = toStore[data.site][data.title] || [];
+      var i;
+      for (i = 0; i < data.files.files.length; i++) {
+          if (toStore[data.site][data.title].indexOf(data.files.files[i]) === -1 ) {
+              toStore[data.site][data.title].push(data.files.files[i])
+          }
+      }
+        console.log('toStore', toStore);
+    chrome.storage.local.set({'files': toStore}, function(a) {
+      console.log('saved');
+    });
+  });
+
+}

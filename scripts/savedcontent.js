@@ -29,6 +29,7 @@ $(document).ready(function () {
                 }
                 if (!objCount(files[site])) {
                     delete files[site];
+                    window.location.reload();
                 }
             }
             console.log(files);
@@ -36,6 +37,11 @@ $(document).ready(function () {
         });
 
     }
+
+    function clearAll() {
+        chrome.storage.local.set({files: {}});
+    }
+
 
     var html = "";
 
@@ -70,6 +76,20 @@ $(document).ready(function () {
     $("#cast-url").click(function() {
         if ($("#url").val() != "") {
             playFile($("#url").val());
+        }
+    });
+
+    $("#save-url").click(function() {
+        if ($("#url").val() != "") {
+            saveFoundFiles({site: "misc.", title: 'Manually entered', files: {files: [$("#url").val()]}});
+            window.location.reload();
+        }
+    });
+
+    $("#clear-all").click(function () {
+        if (confirm("Do you really want to delete all saved links?")) {
+            clearAll();
+            window.location.reload();
         }
     });
 });
